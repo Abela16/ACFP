@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Anonymous Campus Feedback Portal
 
-## Getting Started
+Production-oriented full-stack web app for anonymous student feedback and role-based stakeholder response management.
 
-First, run the development server:
+## Core Features
+
+- Anonymous feedback submission (no student authentication)
+- Public feedback feed with search, filtering, and sorting
+- Like/upvote once per browser session using secure cookie session IDs
+- Admin authentication with signed HTTP-only cookies
+- Role-based access control (department-specific handling)
+- Feedback moderation controls (flag/delete) and status workflow
+- File attachments for feedback (image/document up to 5MB)
+- Basic abuse controls:
+  - rate limiting on submit/like endpoints
+  - offensive language flagging
+
+## Tech Stack
+
+- `Next.js` App Router (frontend + API routes)
+- TypeScript
+- Tailwind CSS
+- SQLite (via Node built-in `node:sqlite`)
+
+## Data Model
+
+- `feedback`
+  - `public_id`, `title`, `description`, `category`, `other_category`
+  - `status`, `likes_count`, `attachment_path`, `tags_json`
+  - moderation fields (`flagged`, `deleted`)
+- `feedback_responses`
+  - ties stakeholder responses to feedback
+- `feedback_likes`
+  - deduplicates likes by session and feedback
+- `admins`
+  - username, hashed password, department role
+
+## Department Mapping
+
+- `Cafeteria` -> `Cafeteria Management`
+- `Security` -> `Security Office`
+- `Education` -> `Academic Office`
+- `Facilities` -> `Administration`
+- `Administration` -> `Administration`
+- `Other` -> `Administration`
+
+## Local Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) for student portal.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open [http://localhost:3000/admin](http://localhost:3000/admin) for admin portal.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Seeded Admin Accounts
 
-## Learn More
+All accounts use initial password `ChangeMe123!` (change for production):
 
-To learn more about Next.js, take a look at the following resources:
+- `cafeteria_admin`
+- `security_admin`
+- `academic_admin`
+- `super_admin`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Security Notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Student anonymity is preserved (no account, no persistent identity table)
+- IP address is used transiently for rate limiting only (not stored in DB)
+- Admin sessions are signed and stored in HTTP-only cookies
+- Passwords are hashed with `scrypt` + random salt
+- Attachments are stored locally under `public/uploads`
 
-## Deploy on Vercel
+## Production Hardening Checklist
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Set `ADMIN_SESSION_SECRET` to a long random value
+- Enforce HTTPS and secure cookies
+- Move storage from local SQLite/files to managed Postgres/object storage
+- Integrate a CAPTCHA provider for higher spam resistance
+- Add centralized logging and monitoring
