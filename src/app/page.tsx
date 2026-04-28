@@ -1,9 +1,11 @@
+import PublicFeedbackFeed from "./_components/PublicFeedbackFeed";
+
 export default function Home() {
   return (
     <main className="snap-y snap-mandatory">
       <section className="snap-start">
-        <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col justify-center gap-6 px-4 py-10 md:px-8">
-          <header className="flex flex-col gap-5">
+        <div className="mx-auto flex w-full max-w-6xl flex-col justify-start gap-6 px-4 pb-10 pt-8 md:px-8 md:pt-12">
+          <header className="flex flex-col items-center gap-5 text-center">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
               Anonymous Campus Feedback Portal
             </p>
@@ -14,7 +16,7 @@ export default function Home() {
               Submit feedback anonymously and follow public responses from campus stakeholders. This portal is designed
               for quick reporting, transparent updates, and better accountability.
             </p>
-            <div className="mt-2 flex flex-wrap gap-3">
+            <div className="mt-2 flex flex-wrap justify-center gap-3">
               <a href="/feedback" className="rounded-md bg-slate-900 px-6 py-3 text-sm font-semibold text-white">
                 Go to Feedback Form
               </a>
@@ -61,6 +63,8 @@ export default function Home() {
               </p>
             </div>
           </section>
+
+          <PublicFeedbackFeed />
 
           <footer className="text-center text-sm text-slate-500">
             <p>
