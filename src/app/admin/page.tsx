@@ -157,11 +157,6 @@ export default function AdminPortal() {
           />
           <button className="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white">Login</button>
         </form>
-        <p className="mt-4 text-xs text-slate-500">
-          Default seeds: cafeteria_admin / security_admin / academic_admin / super_admin with password
-          {" "}
-          <code>ChangeMe123!</code>
-        </p>
         {message ? <p className="mt-3 text-sm text-red-600">{message}</p> : null}
       </main>
     );

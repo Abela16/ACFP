@@ -104,10 +104,12 @@ function seedAdminIfMissing(username: string, password: string, department: Depa
     .run(username, hashPassword(password), department);
 }
 
-seedAdminIfMissing("cafeteria_admin", "ChangeMe123!", "Cafeteria Management");
-seedAdminIfMissing("security_admin", "ChangeMe123!", "Security Office");
-seedAdminIfMissing("academic_admin", "ChangeMe123!", "Academic Office");
-seedAdminIfMissing("super_admin", "ChangeMe123!", "Administration");
+const adminSeedPassword = process.env.ADMIN_SEED_PASSWORD || "ChangeMe123!";
+
+seedAdminIfMissing("cafeteria_admin", adminSeedPassword, "Cafeteria Management");
+seedAdminIfMissing("security_admin", adminSeedPassword, "Security Office");
+seedAdminIfMissing("academic_admin", adminSeedPassword, "Academic Office");
+seedAdminIfMissing("super_admin", adminSeedPassword, "Administration");
 
 export type AdminRecord = {
   id: number;
