@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
 import { FEEDBACK_CATEGORIES, FEEDBACK_STATUSES } from "@/lib/constants";
@@ -26,7 +27,6 @@ export default function FeedbackPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [hasMounted, setHasMounted] = useState(false);
 
   const [category, setCategory] = useState("");
   const [status, setStatus] = useState("");
@@ -41,10 +41,6 @@ export default function FeedbackPage() {
     if (query) params.set("q", query);
     return params.toString();
   }, [category, status, sort, query]);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -124,9 +120,9 @@ export default function FeedbackPage() {
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <a href="/" className="rounded-md border border-slate-300 px-4 py-2 text-sm">
+            <Link href="/" className="rounded-md border border-slate-300 px-4 py-2 text-sm">
               Home
-            </a>
+            </Link>
             <a href="/admin" className="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white">
               Admin Portal
             </a>
@@ -245,9 +241,7 @@ export default function FeedbackPage() {
             <article key={item.id} className="rounded-lg border border-slate-200 p-4">
               <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
                 <span className="rounded bg-slate-100 px-2 py-1 font-medium">{item.feedbackId}</span>
-                <span suppressHydrationWarning>
-                  {hasMounted ? new Date(item.createdAt).toLocaleString() : item.createdAt}
-                </span>
+                <span>{item.createdAt}</span>
                 <span className="rounded bg-blue-50 px-2 py-1 text-blue-700">{item.category}</span>
                 <span className="rounded bg-amber-50 px-2 py-1 text-amber-700">{item.status}</span>
               </div>

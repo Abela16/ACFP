@@ -32,11 +32,6 @@ export default function AdminPortal() {
   const [status, setStatus] = useState("");
   const [responseDrafts, setResponseDrafts] = useState<Record<number, string>>({});
   const [statusDrafts, setStatusDrafts] = useState<Record<number, string>>({});
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -226,9 +221,7 @@ export default function AdminPortal() {
             <article key={item.id} className="rounded-lg border border-slate-200 p-4">
               <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
                 <span className="rounded bg-slate-100 px-2 py-1 font-medium">{item.feedbackId}</span>
-                <span suppressHydrationWarning>
-                  {hasMounted ? new Date(item.createdAt).toLocaleString() : item.createdAt}
-                </span>
+                <span>{item.createdAt}</span>
                 <span className="rounded bg-blue-50 px-2 py-1 text-blue-700">{item.category}</span>
                 <span className="rounded bg-amber-50 px-2 py-1 text-amber-700">{item.status}</span>
                 {item.flagged ? <span className="rounded bg-red-100 px-2 py-1 text-red-700">Flagged</span> : null}
